@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:task="http://www.springframework.org/schema/task"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+   <!-- jdbc properties -->
+   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       <property name="locations">
+           <list>
+               <value>jdbc.properties</value>
+           </list>
+       </property>
+   </bean>
+   <!-- spring jdbc -->
+   <!-- DataSource 설정 -->
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName"><value>${jdbc.driverClassName}</value> </property>
+      <property name="url"><value>${jdbc.url}</value> </property>
+      <property name="username"><value>${jdbc.username}</value></property>
+      <property name="password"><value>${jdbc.password}</value> </property>
+   </bean>
+   
+   <!-- Transaction -->
+   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+       <property name="dataSource"><ref local="dataSource"/></property>
+   </bean>
+   
+   <bean id="userInfoBean" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="target"><ref local="userInfoBean_target"/></property>
+       <property name="transactionManager"><ref local="transactionManager"/></property>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="show*, find*">
+               	   PROPAGATION_REQUIRED, -java.lang.Exception, readOnly
+               </prop>
+               <prop key="add*, del*">
+                   PROPAGATION_REQUIRED, -java.lang.Exception
+               </prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- UserInfoBean 등록 -->
+   <!-- <bean id="userInfoBean" class="com.oraclejava.sample5.UserInfoBean">
+      <property name="dataSource">
+   		 <ref local="dataSource"/>
+   	  </property>
+   </bean> -->
+   
+</beans>

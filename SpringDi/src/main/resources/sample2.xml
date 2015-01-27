@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="hong" class="com.oraclejava.sample2.Person"><!-- p:myPC-ref="bPC" -->
+		<property name="id"><value>850101</value></property>
+		<property name="name"><value>홍길동</value></property>
+		<property name="age"><value>35</value></property>
+		<!-- <property name="myPC" ref="aPC"/> -->
+		<property name="myPC">
+			<list>
+				<!-- 주의! 순서 있음 -->
+				<ref local="aPC"/>
+				<ref local="bPC"/>
+			</list>
+		</property>
+		<property name="myColor">
+			<list>
+				<value>파랑</value>
+				<value>빨강</value>
+				<value>노랑</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="aPC" class="com.oraclejava.sample2.PC">
+		<property name="name"><value>갤럭시노트프로12.2</value></property>
+		<property name="desktop"><value>false</value></property>
+	</bean>
+	
+	<bean id="bPC" class="com.oraclejava.sample2.PC">
+		<property name="name"><value>아이패드에어2</value></property>
+		<property name="desktop"><value>false</value></property>
+	</bean>
+
+</beans>
